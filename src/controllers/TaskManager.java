@@ -1,3 +1,9 @@
+package controllers;
+import model.Task;
+
+import model.Epic;
+import model.Subtask;
+import model.TaskStatus;
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -37,10 +43,11 @@ public class TaskManager {
     }
 
     public void removeAllSubtasks() {
+        subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.getSubtasksIds().clear();
+            updateEpicStatus(epic);
         }
-        subtasks.clear();
     }
 
 
