@@ -1,4 +1,4 @@
-package model;
+package Main.model;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,7 @@ public class Epic extends Task {
                 "Название='" + getTaskName() + '\'' +
                 ", Описание='" + getDescription() + '\'' +
                 ", Статус=" + getStatus() +
-                ", Подзадачи=" + subtasksIds + '}';
+                ", Подзадачи=" + subtasksIds +
+                ", ID=" + getId() + '}';
     }
 }

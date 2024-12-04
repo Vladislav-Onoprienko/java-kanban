@@ -1,4 +1,4 @@
-package model;
+package Main.model;
 
 public class Subtask extends Task {
     private int epicId;
@@ -21,7 +21,8 @@ public class Subtask extends Task {
                 "Название='" + getTaskName() + '\'' +
                 ", Описание='" + getDescription() + '\'' +
                 ", Статус=" + getStatus() +
-                ", EpicId=" + epicId + '}';
+                ", EpicId=" + epicId +
+                ", ID подзадачи=" + getId() + '}';
     }
 }
 
