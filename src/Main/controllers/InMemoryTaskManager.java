@@ -67,11 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        if (task != null) {
             historyManager.add(task);
-        } else {
-            System.out.println("Задача с id " + id + " не найдена.");
-        }
         return task;
     }
 
@@ -80,8 +76,6 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
         if (epic != null) {
             historyManager.add(epic);
-        } else {
-            System.out.println("Эпик с id " + id + " не найден.");
         }
         return epic;
     }
@@ -91,8 +85,6 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask subtask = subtasks.get(id);
         if (subtask != null) {
             historyManager.add(subtask);
-        } else {
-            System.out.println("Подзадача с id " + id + " не найдена.");
         }
         return subtask;
     }
