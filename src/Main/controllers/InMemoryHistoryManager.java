@@ -1,31 +1,79 @@
 package Main.controllers;
 
 import Main.model.Task;
+
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> history = new ArrayList<>();
-    private static final int MAX_HISTORY_SIZE = 10;
+    private final Map<Integer, Node> historyMap = new HashMap<>();
+
+    private final Node head = new Node(null);
+    private final Node tail = new Node(null);
+    public InMemoryHistoryManager() {
+        head.next = tail;
+        tail.prev = head;
+    }
 
     @Override
-    public boolean add(Task task) {
+    public void add(Task task) {
         if (task == null) {
             System.out.println("Ошибка: нельзя добавить null задачу в историю.");
-            return false;
+            return;
         }
 
-        history.add(task);
-
-        if (history.size() > MAX_HISTORY_SIZE) {
-            history.remove(0);
+        if (historyMap.containsKey(task.getId())) {
+            remove(task.getId());
         }
-        return true;
+
+        Node newNode = new Node(task);
+        linkLast(newNode);
+        historyMap.put(task.getId(), newNode);
+    }
+
+    private void linkLast(Node node) {
+        node.prev = tail.prev;
+        node.next = tail;
+        tail.prev.next = node;
+        tail.prev = node;
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        return new ArrayList<>(history);
+    public void remove(int id) {
+        Node node = historyMap.get(id);
+        if (node != null) {
+            removeNode(node);
+            historyMap.remove(id);
+        }
     }
 
+    private void removeNode(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        List<Task> history = new ArrayList<>();
+        Node current = head.next;
+
+        while (current != tail) {
+            history.add(current.task);
+            current = current.next;
+        }
+        return history;
+    }
+
+    private static class Node {
+        Task task;
+        Node prev;
+        Node next;
+
+        public Node(Task task) {
+            this.task = task;
+        }
+    }
 }
