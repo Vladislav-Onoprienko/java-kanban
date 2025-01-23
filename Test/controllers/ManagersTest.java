@@ -1,10 +1,10 @@
 package controllers;
 
-import Main.controllers.InMemoryTaskManager;
-import Main.controllers.Managers;
-import Main.controllers.InMemoryHistoryManager;
-import Main.controllers.TaskManager;
-import Main.controllers.HistoryManager;
+import main.controllers.InMemoryTaskManager;
+import main.controllers.Managers;
+import main.controllers.InMemoryHistoryManager;
+import main.controllers.TaskManager;
+import main.controllers.HistoryManager;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,12 +1,12 @@
 package controllers;
 
-import Main.model.Task;
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.TaskStatus;
+import main.model.Task;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.TaskStatus;
 
-import Main.controllers.Managers;
-import Main.controllers.TaskManager;
+import main.controllers.Managers;
+import main.controllers.TaskManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

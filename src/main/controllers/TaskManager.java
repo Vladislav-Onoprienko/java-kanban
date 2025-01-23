@@ -1,8 +1,8 @@
-package Main.controllers;
+package main.controllers;
 
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.Task;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.Task;
 
 import java.util.List;
 

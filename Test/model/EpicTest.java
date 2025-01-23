@@ -1,10 +1,10 @@
 package model;
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.TaskStatus;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.TaskStatus;
 
-import Main.controllers.Managers;
-import Main.controllers.TaskManager;
+import main.controllers.Managers;
+import main.controllers.TaskManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
-package Main.controllers;
+package main.controllers;
 
-import Main.model.Task;
+import main.model.Task;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
-package Main.controllers;
+package main.controllers;
 
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.Task;
-import Main.model.TaskStatus;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.Task;
+import main.model.TaskStatus;
 
 import java.util.List;
 import java.util.Map;

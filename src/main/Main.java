@@ -1,11 +1,11 @@
-package Main;
+package main;
 
-import Main.controllers.TaskManager;
-import Main.controllers.Managers;
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.Task;
-import Main.model.TaskStatus;
+import main.controllers.TaskManager;
+import main.controllers.Managers;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.Task;
+import main.model.TaskStatus;
 
 public class Main {
 
@@ -87,7 +87,7 @@ public class Main {
         }
     }
 
-    private static void printHistory(TaskManager manager){
+    private static void printHistory(TaskManager manager) {
         System.out.println("\nИстория:");
         for (Task task : manager.getHistory()) {
             System.out.println(task);
