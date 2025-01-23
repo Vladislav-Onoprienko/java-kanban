@@ -14,7 +14,6 @@ class ManagersTest {
     // Проверяем, что Managers всегда возвращает проинициализированный и готовый к работе InMemoryTaskManager
     @Test
     public void shouldGetInitializedTaskManager() {
-
         TaskManager manager = Managers.getDefault();
 
         // Проверяем, что возвращаемый менеджер задач не null
@@ -26,7 +25,6 @@ class ManagersTest {
     // Проверяем, что Managers всегда возвращает проинициализированный и готовый к работе InMemoryHistoryManager
     @Test
     public void shouldGetInitializedHistoryManager() {
-
         HistoryManager historyManager = Managers.getDefaultHistory();
 
         // Проверяем, что возвращаемый менеджер истории не null

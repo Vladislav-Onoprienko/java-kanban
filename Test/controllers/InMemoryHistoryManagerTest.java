@@ -89,7 +89,6 @@ class InMemoryHistoryManagerTest {
         assertFalse(taskManager.getHistory().contains(subtask2), "Вторая подзадача осталась в истории.");
     }
 
-
     // Проверяем, что удалённые подзадачи не хранят старые id
     @Test
     public void shouldNotContainDeletedSubtaskId() {

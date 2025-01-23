@@ -14,7 +14,6 @@ class EpicTest {
     //Проверяем, что эпики равны друг другу, если равен их id
     @Test
     void shouldEpicEqualityById() {
-
         Epic epic1 = new Epic("Эпик 1", "Описание 1");
         epic1.setId(1);
         Epic epic2 = new Epic("Эпик 2", "Описание 2");
