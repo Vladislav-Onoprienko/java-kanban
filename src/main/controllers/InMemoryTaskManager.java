@@ -50,7 +50,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllEpics() {
-        for (Epic epic : epics.values()){
+        for (Epic epic : epics.values()) {
             for (Integer subtaskId : epic.getSubtasksIds()) {
                 subtasks.remove(subtaskId);
                 historyManager.remove(subtaskId);
@@ -238,7 +238,7 @@ public class InMemoryTaskManager implements TaskManager {
                     result.add(subtask);
                 }
             }
-        }else {
+        } else {
             System.out.println("Эпик с id " + epicId + " не найден.");
         }
         return result;
