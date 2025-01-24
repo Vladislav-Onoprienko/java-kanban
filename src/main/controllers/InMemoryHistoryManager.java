@@ -22,8 +22,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         if (task == null) {
-            System.out.println("Ошибка: нельзя добавить null задачу в историю.");
-            return;
+            throw new IllegalArgumentException("Нельзя добавить null задачу в историю.");
         }
 
         if (historyMap.containsKey(task.getId())) {
