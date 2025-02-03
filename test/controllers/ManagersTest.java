@@ -1,10 +1,10 @@
 package controllers;
 
-import Main.controllers.InMemoryTaskManager;
-import Main.controllers.Managers;
-import Main.controllers.InMemoryHistoryManager;
-import Main.controllers.TaskManager;
-import Main.controllers.HistoryManager;
+import main.controllers.InMemoryTaskManager;
+import main.controllers.Managers;
+import main.controllers.InMemoryHistoryManager;
+import main.controllers.TaskManager;
+import main.controllers.HistoryManager;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +14,6 @@ class ManagersTest {
     // Проверяем, что Managers всегда возвращает проинициализированный и готовый к работе InMemoryTaskManager
     @Test
     public void shouldGetInitializedTaskManager() {
-
         TaskManager manager = Managers.getDefault();
 
         // Проверяем, что возвращаемый менеджер задач не null
@@ -26,7 +25,6 @@ class ManagersTest {
     // Проверяем, что Managers всегда возвращает проинициализированный и готовый к работе InMemoryHistoryManager
     @Test
     public void shouldGetInitializedHistoryManager() {
-
         HistoryManager historyManager = Managers.getDefaultHistory();
 
         // Проверяем, что возвращаемый менеджер истории не null

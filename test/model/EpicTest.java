@@ -1,10 +1,10 @@
 package model;
-import Main.model.Epic;
-import Main.model.Subtask;
-import Main.model.TaskStatus;
+import main.model.Epic;
+import main.model.Subtask;
+import main.model.TaskStatus;
 
-import Main.controllers.Managers;
-import Main.controllers.TaskManager;
+import main.controllers.Managers;
+import main.controllers.TaskManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ class EpicTest {
     //Проверяем, что эпики равны друг другу, если равен их id
     @Test
     void shouldEpicEqualityById() {
-
         Epic epic1 = new Epic("Эпик 1", "Описание 1");
         epic1.setId(1);
         Epic epic2 = new Epic("Эпик 2", "Описание 2");

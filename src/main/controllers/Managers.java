@@ -1,4 +1,4 @@
-package Main.controllers;
+package main.controllers;
 
 public class Managers {
     public static TaskManager getDefault() {

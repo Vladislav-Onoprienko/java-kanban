@@ -1,4 +1,4 @@
-package Main.model;
+package main.model;
 
 public class Subtask extends Task {
     private int epicId;
@@ -15,6 +15,7 @@ public class Subtask extends Task {
     public void setEpicId(int epicId) {
         this.epicId = epicId;
     }
+
     @Override
     public String toString() {
         return "Подзадача{" +

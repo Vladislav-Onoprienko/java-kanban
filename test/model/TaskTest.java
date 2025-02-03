@@ -1,7 +1,7 @@
 package model;
 
-import Main.model.Task;
-import Main.model.TaskStatus;
+import main.model.Task;
+import main.model.TaskStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
