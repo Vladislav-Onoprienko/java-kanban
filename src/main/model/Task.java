@@ -8,11 +8,19 @@ public class Task {
     private int id;
     private String description;
     private TaskStatus status;
+    private final TaskType type;
 
     public Task(String taskName, String description, TaskStatus status) {
         this.taskName = taskName;
         this.description = description;
         this.status = status;
+        this.type = TaskType.TASK;
+    }
+    public Task(String taskName, String description, TaskStatus status, TaskType type) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+        this.type = type;
     }
 
     public String getTaskName() {
@@ -31,6 +39,8 @@ public class Task {
         return status;
     }
 
+    public TaskType getType() { return type;}
+
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
@@ -46,6 +56,7 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -65,8 +76,8 @@ public class Task {
         return "Задача{" +
                 "Название='" + taskName + '\'' +
                 ", id=" + id +
-                ", описание='" + description + '\'' +
-                ", статус=" + status +
+                ", Описание='" + description + '\'' +
+                ", Статус=" + status +
                 '}';
     }
 }
