@@ -16,6 +16,7 @@ public class Task {
         this.status = status;
         this.type = TaskType.TASK;
     }
+
     public Task(String taskName, String description, TaskStatus status, TaskType type) {
         this.taskName = taskName;
         this.description = description;
@@ -39,7 +40,9 @@ public class Task {
         return status;
     }
 
-    public TaskType getType() { return type;}
+    public TaskType getType() {
+        return type;
+    }
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
