@@ -8,20 +8,11 @@ public class Task {
     private int id;
     private String description;
     private TaskStatus status;
-    private final TaskType type;
 
     public Task(String taskName, String description, TaskStatus status) {
         this.taskName = taskName;
         this.description = description;
         this.status = status;
-        this.type = TaskType.TASK;
-    }
-
-    public Task(String taskName, String description, TaskStatus status, TaskType type) {
-        this.taskName = taskName;
-        this.description = description;
-        this.status = status;
-        this.type = type;
     }
 
     public String getTaskName() {
@@ -41,7 +32,7 @@ public class Task {
     }
 
     public TaskType getType() {
-        return type;
+        return TaskType.TASK;
     }
 
     public void setTaskName(String taskName) {

@@ -75,11 +75,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String taskToString(Task task) {
-        String epicId = task instanceof Subtask ? String.valueOf(((Subtask) task).getEpicId()) : "";
+        String epicId = task.getType() == TaskType.SUBTASK ? String.valueOf(((Subtask) task).getEpicId()) : "";
 
-        if (task instanceof Epic) {
-            epicId = "";
-        }
         return String.join(",",
                 String.valueOf(task.getId()),
                 task.getType().name(),
@@ -90,7 +87,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         );
     }
 
-    public static Task fromString(String value) throws ManagerSaveException {
+    public static Task fromString(String value)  {
         String[] fields = value.trim().split(",");
         TaskType type = TaskType.valueOf(fields[1]);
 
@@ -121,7 +118,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    private void save() throws ManagerSaveException {
+    private void save() {
         try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
             writer.write("\uFEFF"); //Столкнулся с проблемой вывода данных в Exel, поэтому нашел такое решение
             writer.write("id,type,name,status,description,epic\n");
@@ -142,7 +139,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
         try (BufferedReader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
@@ -159,9 +156,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 try {
                     Task task = fromString(line);
 
-                    if (task instanceof Epic) {
+                    if (task.getType() == TaskType.EPIC) {
                         manager.addEpic((Epic) task);
-                    } else if (task instanceof Subtask) {
+                    } else if (task.getType() == TaskType.SUBTASK) {
                         manager.addSubtask((Subtask) task);
                     } else {
                         manager.addTask(task);
