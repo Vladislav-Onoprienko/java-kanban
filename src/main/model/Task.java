@@ -31,6 +31,10 @@ public class Task {
         return status;
     }
 
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
@@ -46,6 +50,7 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -65,8 +70,8 @@ public class Task {
         return "Задача{" +
                 "Название='" + taskName + '\'' +
                 ", id=" + id +
-                ", описание='" + description + '\'' +
-                ", статус=" + status +
+                ", Описание='" + description + '\'' +
+                ", Статус=" + status +
                 '}';
     }
 }
