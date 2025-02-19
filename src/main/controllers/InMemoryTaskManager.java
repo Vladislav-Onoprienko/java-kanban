@@ -282,7 +282,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Получение отсортированного списка задач по приоритету
     @Override
-    public List<Task> getPrioritizedTasks() {  return new ArrayList<>(prioritizedTasks); }
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
 
 
     //Метод для проверки пересечений двух задач
