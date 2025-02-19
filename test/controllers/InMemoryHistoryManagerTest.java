@@ -11,6 +11,7 @@ import main.controllers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 
 class InMemoryHistoryManagerTest {
@@ -144,4 +145,24 @@ class InMemoryHistoryManagerTest {
         List<Task> history = taskManager.getHistory();
         assertTrue(history.contains(updatedTask), "История не содержит обновленную задачу.");
     }
+
+    //Поверяем пустую историю задач
+    @Test
+    public void shouldReturnEmptyHistoryWhenNoTasksViewed() {
+        assertTrue(taskManager.getHistory().isEmpty(), "История должна быть пустой, если задачи не просматривались.");
+    }
+
+    //
+    @Test
+    public void shouldNotDuplicateTasksInHistory() {
+        Task task = new Task("Задача 1", "Описание 1", TaskStatus.NEW);
+        taskManager.addTask(task);
+        taskManager.getTaskById(task.getId());
+        taskManager.getTaskById(task.getId());
+
+        List<Task> history = taskManager.getHistory();
+        assertEquals(1, history.size(), "История не должна содержать дубликатов.");
+        assertEquals(task, history.get(0), "Задача в истории должна совпадать с добавленной.");
+    }
+
 }

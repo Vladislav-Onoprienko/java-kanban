@@ -1,6 +1,9 @@
 package main.model;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Task {
 
@@ -8,6 +11,16 @@ public class Task {
     private int id;
     private String description;
     private TaskStatus status;
+    private Duration duration;
+    private LocalDateTime startTime;
+
+    public Task(String taskName, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        this.taskName = taskName;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
 
     public Task(String taskName, String description, TaskStatus status) {
         this.taskName = taskName;
@@ -35,6 +48,18 @@ public class Task {
         return TaskType.TASK;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return (startTime != null && duration != null) ? startTime.plus(duration) : null;
+    }
+
     public void setTaskName(String taskName) {
         this.taskName = taskName;
     }
@@ -51,6 +76,13 @@ public class Task {
         this.status = status;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -67,11 +99,16 @@ public class Task {
 
     @Override
     public String toString() {
+        String startTimeString = (startTime != null) ? startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "Не задано";
+        String endTimeString = (getEndTime() != null) ? getEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "Не задано";
         return "Задача{" +
                 "Название='" + taskName + '\'' +
                 ", id=" + id +
                 ", Описание='" + description + '\'' +
                 ", Статус=" + status +
+                ", Длительность=" + (duration != null ? duration : "Не задано") +
+                ", Время начала=" + startTimeString +
+                ", Время окончания=" + endTimeString +
                 '}';
     }
 }
