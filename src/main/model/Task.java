@@ -6,13 +6,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {
-
     private String taskName;
     private int id;
     private String description;
     private TaskStatus status;
-    private Duration duration;
-    private LocalDateTime startTime;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String taskName, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         this.taskName = taskName;

@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private Duration duration;
-    private LocalDateTime startTime;
     private LocalDateTime endTime;
     private List<Integer> subtasksIds = new ArrayList<>();
 
@@ -75,7 +73,6 @@ public class Epic extends Task {
             this.duration = Duration.ZERO;
             this.startTime = null;
             this.endTime = null;
-            System.out.println("Нет подзадач для обновления времени и продолжительности.");
             return;
         }
 
