@@ -33,11 +33,9 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             }
         } catch (NotFoundException e) {
             sendNotFound(h);
-        }
-        catch (TimeConflictException e) {
+        } catch (TimeConflictException e) {
             sendHasInteractions(h);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             sendInternalError(h);
         }
     }
