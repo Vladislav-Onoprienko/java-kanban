@@ -6,7 +6,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public final class GsonFactory {
-    private GsonFactory() {}
+    private GsonFactory() {
+    }
 
     public static Gson createGson() {
         return new GsonBuilder()
