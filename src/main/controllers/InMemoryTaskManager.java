@@ -84,21 +84,27 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = tasks.get(id);
-        historyManager.add(task);
+        if (task != null) {
+            historyManager.add(task);
+        }
         return task;
     }
 
     @Override
     public Epic getEpicById(int id) {
         Epic epic = epics.get(id);
-        historyManager.add(epic);
+        if (epic != null) {
+            historyManager.add(epic);
+        }
         return epic;
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
         Subtask subtask = subtasks.get(id);
-        historyManager.add(subtask);
+        if (subtask != null) {
+            historyManager.add(subtask);
+        }
         return subtask;
     }
 
@@ -142,6 +148,10 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setId(nextId++);
 
         subtasks.put(subtask.getId(), subtask);
+
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
+        }
 
         Epic epic = epics.get(subtask.getEpicId());
         if (epic != null) {
@@ -192,7 +202,7 @@ public class InMemoryTaskManager implements TaskManager {
                         && subtask.getId() != existingTask.getId());
 
         if (isOverlapping) {
-            throw new IllegalArgumentException("Подзадача пересекается по времени с уже существующей задачей.");
+            throw new TimeConflictException("Подзадача пересекается по времени с уже существующей задачей.");
         }
 
         int subtaskId = subtask.getId();
