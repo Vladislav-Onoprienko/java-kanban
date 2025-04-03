@@ -1,7 +1,5 @@
 package server;
 
-import main.model.Epic;
-import main.model.Subtask;
 import main.model.Task;
 import main.model.TaskStatus;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HistoryAndPriorityTest extends HttpTaskServerTestBase {
 
-    //Проверяет получение истории просмотров задач
+    //Проверяем получение истории просмотров задач
     @Test
     void shouldGetTaskHistory() throws IOException, InterruptedException {
         Task task = new Task("Задача", "Описание", TaskStatus.NEW);
@@ -52,5 +50,55 @@ class HistoryAndPriorityTest extends HttpTaskServerTestBase {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
         assertTrue(response.body().indexOf("Задача 2") < response.body().indexOf("Задача 1"));
+    }
+
+    //Проверяем, что неподдерживаемый метод возвращает 405 для /history
+    @Test
+    void shouldReturn405ForHistoryInvalidMethod() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/history"))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.headers().map().get("Allow").contains("GET"));
+    }
+
+    //Проверяем, что неподдерживаемый метод возвращает 405 для /prioritized
+    @Test
+    void shouldReturn405ForPrioritizedInvalidMethod() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/prioritized"))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.headers().map().get("Allow").contains("GET"));
+    }
+
+    //Проверяем обработку некорректного пути для /history
+    @Test
+    void shouldReturn400ForHistoryInvalidPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/history/invalid"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+    }
+
+    //Проверяем обработку некорректного пути для /prioritized
+    @Test
+    void shouldReturn400ForPrioritizedInvalidPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/prioritized/invalid"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
     }
 }

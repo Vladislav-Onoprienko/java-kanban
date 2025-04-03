@@ -1,6 +1,5 @@
 package main.server;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 import main.controllers.TaskManager;
 import main.controllers.Managers;
@@ -12,21 +11,16 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private final HttpServer server;
     private final TaskManager taskManager;
-    private static final Gson gson = GsonFactory.createGson();
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
         this.taskManager = Managers.getDefault();
         this.server = HttpServer.create(new InetSocketAddress(PORT), 0);
 
-        server.createContext("/tasks", new TaskHandler(taskManager, gson));
-        server.createContext("/epics", new EpicHandler(taskManager, gson));
-        server.createContext("/subtasks", new SubtaskHandler(taskManager, gson));
-        server.createContext("/history", new HistoryHandler(taskManager, gson));
-        server.createContext("/prioritized", new PrioritizedHandler(taskManager, gson));
-    }
-
-    public static Gson getGson() {
-        return gson;
+        server.createContext("/tasks", new TaskHandler(taskManager));
+        server.createContext("/epics", new EpicHandler(taskManager));
+        server.createContext("/subtasks", new SubtaskHandler(taskManager));
+        server.createContext("/history", new HistoryHandler(taskManager));
+        server.createContext("/prioritized", new PrioritizedHandler(taskManager));
     }
 
     public void start() {

@@ -1,18 +1,22 @@
 package main.server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import main.exceptions.NotFoundException;
+import main.server.adapters.DurationTypeAdapter;
+import main.server.adapters.LocalDateTimeTypeAdapter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public abstract class BaseHttpHandler {
-    protected final Gson gson;
-
-    protected BaseHttpHandler(Gson gson) {
-        this.gson = gson;
-    }
+    protected static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+            .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
+            .create();
 
     protected void sendText(HttpExchange h, String text, int statusCode) throws IOException {
         byte[] response = text.getBytes(StandardCharsets.UTF_8);
@@ -26,7 +30,7 @@ public abstract class BaseHttpHandler {
         if (data == null) {
             sendNotFound(h);
         } else {
-            sendText(h, gson.toJson(data), 200);
+            sendText(h, GSON.toJson(data), 200);
         }
     }
 
@@ -47,6 +51,15 @@ public abstract class BaseHttpHandler {
         sendText(h, "Internal Server Error", 500);
     }
 
+    protected void sendBadRequest(HttpExchange h, String message) throws IOException {
+        sendText(h, "Bad Request: " + message, 400);
+    }
+
+    protected void sendMethodNotAllowed(HttpExchange h, String allowedMethods) throws IOException {
+        h.getResponseHeaders().set("Allow", allowedMethods);
+        sendText(h, "Method Not Allowed", 405);
+    }
+
     protected String readRequestBody(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
     }
@@ -55,7 +68,11 @@ public abstract class BaseHttpHandler {
         try {
             return Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
-            throw new NotFoundException("Invalid ID format");
+            throw new IllegalArgumentException("Invalid ID format");
         }
+    }
+
+    public static Gson getGson() {  // Геттер
+        return GSON;
     }
 }

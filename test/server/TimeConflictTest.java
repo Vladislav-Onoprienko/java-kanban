@@ -51,19 +51,19 @@ class TimeConflictTest extends HttpTaskServerTestBase {
                 () -> manager.addSubtask(conflictingSub));
     }
 
-    //Проверяем возврат статуса 406 при конфликте времени задач через HTTP
+    //Проверяем возврат статуса 400 при конфликте времени задач через HTTP
     @Test
-    void shouldReturn406ForTaskConflictViaHttp() throws IOException, InterruptedException {
+    void shouldReturn400ForTaskConflictViaHttp() throws IOException, InterruptedException {
         manager.addTask(createTestTask("Задача 1", testTime));
 
         HttpResponse<String> response = sendConflictRequest(
                 createTestTask("Задача 2", testTime.plusMinutes(30)),
                 "/tasks");
 
-        assertEquals(406, response.statusCode());
+        assertEquals(400, response.statusCode());
     }
 
-    //Проверяем возврат статуса 406 при конфликте времени подзадач через HTTP
+    //Проверяем возврат статуса 400 при конфликте времени подзадач через HTTP
     @Test
     void shouldReturn406ForSubtaskTimeConflictViaHttp() throws IOException, InterruptedException {
         manager.addSubtask(createTestSubtask("Подзадача 1", testTime));
@@ -72,7 +72,7 @@ class TimeConflictTest extends HttpTaskServerTestBase {
                 createTestSubtask("Подзадача 2", testTime.plusMinutes(30)),
                 "/subtasks");
 
-        assertEquals(406, response.statusCode());
+        assertEquals(400, response.statusCode());
     }
 
     private Task createTestTask(String name, LocalDateTime startTime) {
