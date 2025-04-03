@@ -81,7 +81,8 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             if (epic.getTaskName() == null || epic.getDescription() == null) {
                 sendBadRequest(h, "Epic name and description fields are required");
                 return;
-            } if (epic.getId() == 0) {
+            }
+            if (epic.getId() == 0) {
                     taskManager.addEpic(epic);
             } else {
                 taskManager.updateEpic(epic);
