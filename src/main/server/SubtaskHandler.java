@@ -12,8 +12,7 @@ import java.io.IOException;
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
 
-    public SubtaskHandler(TaskManager taskManager, Gson gson) {
-        super(gson);
+    public SubtaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -28,7 +27,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
                 case "GET": handleGet(h, pathParts); break;
                 case "POST": handlePost(h); break;
                 case "DELETE": handleDelete(h, pathParts); break;
-                default: sendNotFound(h);
+                default: sendMethodNotAllowed(h, "GET, POST, DELETE");
             }
         } catch (NotFoundException e) {
             sendNotFound(h);
@@ -40,28 +39,38 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGet(HttpExchange h, String[] pathParts) throws IOException, NotFoundException {
-        switch (pathParts.length) {
-            case 2:
-                sendData(h, taskManager.getAllSubtasks());
-                break;
-            case 3:
-                int id = extractId(pathParts[2]);
-                sendData(h, taskManager.getSubtaskById(id));
-                break;
-            default:
-                sendNotFound(h);
+        try {
+            switch (pathParts.length) {
+                case 2:
+                    sendData(h, taskManager.getAllSubtasks());
+                    break;
+                case 3:
+                    int id = extractId(pathParts[2]);
+                    sendData(h, taskManager.getSubtaskById(id));
+                    break;
+                default:
+                    sendBadRequest(h, "Invalid path format");
+            }
+        } catch (IllegalArgumentException e) {
+            sendBadRequest(h, e.getMessage());
+        } catch (NotFoundException e) {
+            sendNotFound(h);
         }
     }
 
     private void handlePost(HttpExchange h) throws IOException {
         String body = readRequestBody(h);
         if (body == null || body.isBlank()) {
-            sendInternalError(h);
+            sendBadRequest(h, "Request body is empty");
             return;
         }
 
         try {
-            Subtask subtask = gson.fromJson(body, Subtask.class);
+            Subtask subtask = GSON.fromJson(body, Subtask.class);
+            if (subtask.getTaskName() == null || subtask.getDescription() == null || subtask.getEpicId() == 0) {
+                sendBadRequest(h, "Subtask name, description and epicId are required");
+                return;
+            }
             if (subtask.getId() == 0) {
                 taskManager.addSubtask(subtask);
             } else {
@@ -69,7 +78,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             }
             sendCreated(h);
         } catch (Exception e) {
-            throw e;
+            sendBadRequest(h, "Invalid Subtask data");
         }
     }
 
@@ -79,7 +88,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             taskManager.deleteTaskById(id);
             sendData(h, "");
         } else {
-            sendNotFound(h);
+            sendBadRequest(h, "Invalid path format");
         }
     }
 }

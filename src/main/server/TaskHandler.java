@@ -13,8 +13,7 @@ import java.io.IOException;
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
 
-    public TaskHandler(TaskManager taskManager, Gson gson) {
-        super(gson);
+    public TaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -29,7 +28,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 case "GET": handleGet(h, pathParts); break;
                 case "POST": handlePost(h); break;
                 case "DELETE": handleDelete(h, pathParts); break;
-                default: sendNotFound(h);
+                default: sendMethodNotAllowed(h, "GET, POST, DELETE");
             }
         } catch (NotFoundException e) {
             sendNotFound(h);
@@ -50,19 +49,19 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 sendData(h, taskManager.getTaskById(id));
                 break;
             default:
-                sendNotFound(h);
+                sendBadRequest(h, "Invalid path format");
         }
     }
 
     private void handlePost(HttpExchange h) throws IOException {
         String body = readRequestBody(h);
         if (body == null || body.isBlank()) {
-            sendInternalError(h);
+            sendBadRequest(h, "Request body is empty");
             return;
         }
 
         try {
-            Task task = gson.fromJson(body, Task.class);
+            Task task = GSON.fromJson(body, Task.class);
             if (task.getId() == 0) {
                 taskManager.addTask(task);
             } else {
@@ -70,13 +69,13 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             }
             sendCreated(h);
         } catch (Exception e) {
-            throw e;
+            sendBadRequest(h, "Invalid Task data");
         }
     }
 
     private void handleDelete(HttpExchange h, String[] pathParts) throws IOException, NotFoundException {
         if (pathParts.length != 3) {
-            sendNotFound(h);
+            sendBadRequest(h, "Invalid path format");
             return;
         }
 

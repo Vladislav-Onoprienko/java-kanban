@@ -72,6 +72,19 @@ class TaskHandlerTest extends HttpTaskServerTestBase {
         assertTrue(response.body().contains("Задача 2"));
     }
 
+    //Проверяем обработку запроса с некорректным путем
+    @Test
+    void shouldReturn400ForInvalidPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/tasks/123/invalid"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());  // Раньше было 404
+        assertTrue(response.body().contains("Invalid path format"));
+    }
+
     //Проверяем обработку запроса несуществующей задачи
     @Test
     void shouldReturn404ForNonExistentTask() throws IOException, InterruptedException {
@@ -82,6 +95,19 @@ class TaskHandlerTest extends HttpTaskServerTestBase {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(404, response.statusCode());
+    }
+
+    //Проверяем, что неподдерживаемый метод возвращает ошибку 405
+    @Test
+    void shouldReturn405ForInvalidMethod() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/tasks"))
+                .PUT(HttpRequest.BodyPublishers.noBody())  // Неподдерживаемый метод
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());  // Раньше было 404
+        assertTrue(response.headers().map().get("Allow").contains("GET, POST, DELETE"));
     }
 
     //Проверяем удаление задачи через HTTP-запрос

@@ -102,6 +102,44 @@ class EpicHandlerTest extends HttpTaskServerTestBase {
         assertTrue(response.body().contains("Not Found"));
     }
 
+    //Проверяем обработку некорректного пути
+    @Test
+    void shouldReturn400ForInvalidPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/epics/123/invalid"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().contains("Invalid path format"));
+    }
+
+    // Проверяем, что неподдерживаемый метод возвращает 405
+    @Test
+    void shouldReturn405ForInvalidMethod() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/epics"))
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.headers().map().get("Allow").contains("GET, POST, DELETE"));
+    }
+
+    // Проверяем создание эпика с невалидным телом запроса (пустым JSON)
+    @Test
+    void shouldReturn400ForInvalidEpicJson() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/epics"))
+                .POST(HttpRequest.BodyPublishers.ofString("{}"))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+    }
+
     //Проверяет удаление эпика через HTTP-запрос
     @Test
     void shouldDeleteEpic() throws IOException, InterruptedException {

@@ -2,7 +2,7 @@ package server;
 import com.google.gson.Gson;
 import main.controllers.InMemoryTaskManager;
 import main.controllers.TaskManager;
-import main.server.GsonFactory;
+import main.server.BaseHttpHandler;
 import main.server.HttpTaskServer;
 import org.junit.jupiter.api.*;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public abstract class HttpTaskServerTestBase {
     @BeforeEach
     public void setUp() throws IOException {
         manager = new InMemoryTaskManager();
-        gson = GsonFactory.createGson();
+        gson = BaseHttpHandler.getGson();
         taskServer = new HttpTaskServer(manager);
         client = HttpClient.newHttpClient();
         taskServer.start();

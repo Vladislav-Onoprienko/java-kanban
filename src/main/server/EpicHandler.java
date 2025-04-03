@@ -13,8 +13,7 @@ import java.io.IOException;
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
 
-    public EpicHandler(TaskManager taskManager, Gson gson) {
-        super(gson);
+    public EpicHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -36,7 +35,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     handleDelete(h, pathParts);
                     break;
                 default:
-                    sendNotFound(h);
+                    sendMethodNotAllowed(h, "GET, POST, DELETE");
             }
         } catch (NotFoundException e) {
             sendNotFound(h);
@@ -63,31 +62,34 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         sendData(h, taskManager.getSubtasksOfEpic(epicId));
                     }
                 } else {
-                    sendNotFound(h);
+                    sendBadRequest(h, "Invalid path format");
                 }
                 break;
             default:
-                sendNotFound(h);
+                sendBadRequest(h, "Invalid path format");
         }
     }
 
     private void handlePost(HttpExchange h) throws IOException {
         String body = readRequestBody(h);
         if (body == null || body.isBlank()) {
-            sendInternalError(h);
+            sendBadRequest(h, "Request body is empty");
             return;
         }
 
         try {
-            Epic epic = gson.fromJson(body, Epic.class);
-            if (epic.getId() == 0) {
-                taskManager.addEpic(epic);
+            Epic epic = GSON.fromJson(body, Epic.class);
+            if (epic.getTaskName() == null || epic.getDescription() == null) {
+                sendBadRequest(h, "Epic name and description fields are required");
+                return;
+            }if (epic.getId() == 0) {
+                    taskManager.addEpic(epic);
             } else {
                 taskManager.updateEpic(epic);
             }
             sendCreated(h);
         } catch (Exception e) {
-            throw e;
+            sendBadRequest(h, "Invalid Epic data");
         }
     }
 

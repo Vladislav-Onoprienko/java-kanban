@@ -101,4 +101,55 @@ public class SubtaskHandlerTest extends HttpTaskServerTestBase {
         assertEquals(200, response.statusCode());
         assertNull(manager.getSubtaskById(subtask.getId()));
     }
+
+    // Проверяем обработку некорректного пути
+    @Test
+    void shouldReturn400ForInvalidPath() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks/123/invalid"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().contains("Invalid path format"));
+    }
+
+    // Проверяем, что неподдерживаемый метод возвращает 405
+    @Test
+    void shouldReturn405ForInvalidMethod() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks"))
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.headers().map().get("Allow").contains("GET, POST, DELETE"));
+    }
+
+    // Проверяем создание подзадачи с невалидным телом запроса (пустым JSON)
+    @Test
+    void shouldReturn400ForInvalidSubtaskJson() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks"))
+                .POST(HttpRequest.BodyPublishers.ofString("{}"))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+    }
+
+    // Проверяем обработку неверного формата ID
+    @Test
+    void shouldReturn400ForInvalidIdFormat() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/subtasks/abc"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().contains("Invalid ID format"));
+    }
 }
